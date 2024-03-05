@@ -1,7 +1,8 @@
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-
+const csswring = require('csswring')
+const PostCSSAssetsPlugin = require('postcss-assets-webpack-plugin');
 const paths = require('./paths')
 
 module.exports = {
@@ -17,6 +18,15 @@ module.exports = {
 
   // Customize the webpack build process
   plugins: [
+    new PostCSSAssetsPlugin({
+      test: /\.css$/,
+      log: true,
+      plugins: [
+        // Pack same CSS media query rules into one media query rule
+        // Minify CSS file with source maps. That’s only
+        csswring({preservehacks: true, removeallcomments: true}),
+      ],
+    }),
     // Removes/cleans build folders and unused assets when rebuilding
     new CleanWebpackPlugin(),
 
